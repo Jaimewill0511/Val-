@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine? 💕</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rose: #c9184a;
+    --blush: #ff758f;
+    --cream: #fff1f3;
+    --deep: #590d22;
+    --gold: #d4a574;
+    --petal: #ffccd5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--cream);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .hearts-bg {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .floating-heart {
+    position: absolute;
+    font-size: 1.2rem;
+    opacity: 0;
+    animation: floatUp linear infinite;
+    color: var(--blush);
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(100vh) rotate(0deg) scale(0.5); opacity: 0; }
+    10% { opacity: 0.6; }
+    90% { opacity: 0.3; }
+    100% { transform: translateY(-10vh) rotate(360deg) scale(1.2); opacity: 0; }
+  }
+
+  .card {
+    position: relative;
+    z-index: 10;
+    background: white;
+    border-radius: 24px;
+    padding: 3.5rem 3rem;
+    max-width: 480px;
+    width: 90vw;
+    text-align: center;
+    box-shadow:
+      0 4px 24px rgba(201, 24, 74, 0.08),
+      0 20px 60px rgba(89, 13, 34, 0.06);
+    animation: cardIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(30px) scale(0.96);
+  }
+
+  @keyframes cardIn {
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .heart-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+    animation: heartbeat 1.2s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    15% { transform: scale(1.15); }
+    30% { transform: scale(1); }
+    45% { transform: scale(1.1); }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.4rem;
+    color: var(--deep);
+    line-height: 1.2;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+  }
+
+  h1 em {
+    color: var(--rose);
+    font-style: italic;
+  }
+
+  .subtitle {
+    font-size: 1.15rem;
+    color: var(--gold);
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
+  .buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 0.9rem 2.4rem;
+    border: none;
+    border-radius: 100px;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-yes {
+    background: var(--rose);
+    color: white;
+    box-shadow: 0 4px 16px rgba(201, 24, 74, 0.3);
+  }
+
+  .btn-yes:hover {
+    background: var(--deep);
+    transform: scale(1.08);
+    box-shadow: 0 6px 24px rgba(201, 24, 74, 0.4);
+  }
+
+  .btn-no {
+    background: var(--petal);
+    color: var(--rose);
+  }
+
+  .btn-no:hover {
+    transform: scale(0.95);
+  }
+
+  .success {
+    display: none;
+  }
+
+  .success.visible {
+    display: block;
+    animation: successIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  @keyframes successIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .success h1 {
+    font-size: 2.8rem;
+    color: var(--rose);
+    margin-bottom: 0.5rem;
+  }
+
+  .success p {
+    font-size: 1.3rem;
+    color: var(--deep);
+    font-style: italic;
+  }
+
+  .success .big-heart {
+    font-size: 6rem;
+    display: block;
+    margin: 1rem 0;
+    animation: heartbeat 0.8s ease-in-out infinite;
+  }
+
+  .question { transition: opacity 0.3s; }
+  .question.hidden { display: none; }
+
+  .confetti-piece {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    z-index: 100;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+
+  .envelope {
+    position: absolute;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 40px;
+    background: var(--petal);
+    border-radius: 4px 4px 0 0;
+    border: 2px solid var(--blush);
+    overflow: hidden;
+  }
+
+  .envelope::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 32px;
+    height: 32px;
+    background: var(--cream);
+    border: 2px solid var(--blush);
+    margin-top: -16px;
+  }
+
+  @media (max-width: 480px) {
+    .card { padding: 2.5rem 1.5rem; }
+    h1 { font-size: 1.8rem; }
+    .buttons { flex-direction: column; }
+    .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+
+<div class="card">
+  <div class="envelope"></div>
+
+  <div class="question" id="question">
+    <span class="heart-icon">💌</span>
+    <h1>Will you be my <em>Valentine?</em></h1>
+    <p class="subtitle">— you already know the right answer —</p>
+    <div class="buttons">
+      <button class="btn btn-yes" id="btnYes" onclick="sayYes()">Yes! 💕</button>
+      <button class="btn btn-no" id="btnNo" onmouseover="dodgeNo()" onclick="dodgeNo()">No</button>
+    </div>
+  </div>
+
+  <div class="success" id="success">
+    <span class="big-heart">💖</span>
+    <h1>Yay!!</h1>
+    <p>I knew you'd say yes ✨<br>Happy Valentine's Day, beautiful</p>
+  </div>
+</div>
+
+<script>
+  const bg = document.getElementById('heartsBg');
+  const hearts = ['♥', '❤', '💕', '♡', '❥'];
+  for (let i = 0; i < 25; i++) {
+    const el = document.createElement('span');
+    el.className = 'floating-heart';
+    el.textContent = hearts[i % hearts.length];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.animationDuration = (6 + Math.random() * 8) + 's';
+    el.style.animationDelay = (Math.random() * 10) + 's';
+    el.style.fontSize = (0.8 + Math.random() * 1.5) + 'rem';
+    bg.appendChild(el);
+  }
+
+  let noCount = 0;
+  const messages = ["No", "Are you sure?", "Really?? 🥺", "Think again...", "Pretty please?", "💔", "..."];
+  const btnNo = document.getElementById('btnNo');
+  const btnYes = document.getElementById('btnYes');
+
+  function dodgeNo() {
+    noCount++;
+    btnNo.textContent = messages[Math.min(noCount, messages.length - 1)];
+    const scale = 1 + (noCount * 0.12);
+    btnYes.style.transform = `scale(${Math.min(scale, 1.8)})`;
+    btnYes.style.fontSize = `${1.15 + noCount * 0.08}rem`;
+    const rx = (Math.random() - 0.5) * 120;
+    const ry = (Math.random() - 0.5) * 30;
+    btnNo.style.transform = `translate(${rx}px, ${ry}px)`;
+    btnNo.style.transition = 'transform 0.2s ease';
+    if (noCount > 3) {
+      const shrink = Math.max(0.3, 1 - (noCount - 3) * 0.15);
+      btnNo.style.transform += ` scale(${shrink})`;
+      btnNo.style.opacity = Math.max(0.3, 1 - (noCount - 3) * 0.15);
+    }
+  }
+
+  function sayYes() {
+    document.getElementById('question').classList.add('hidden');
+    document.getElementById('success').classList.add('visible');
+    launchConfetti();
+  }
+
+  function launchConfetti() {
+    const colors = ['#c9184a', '#ff758f', '#ffccd5', '#d4a574', '#ff4d6d', '#fff1f3'];
+    for (let i = 0; i < 80; i++) {
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      piece.style.animationDuration = (1.5 + Math.random() * 2.5) + 's';
+      piece.style.animationDelay = (Math.random() * 0.8) + 's';
+      piece.style.width = (6 + Math.random() * 8) + 'px';
+      piece.style.height = (6 + Math.random() * 8) + 'px';
+      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 5000);
+    }
+  }
+</script>
+
+</body>
+</html>
